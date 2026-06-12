@@ -193,7 +193,7 @@ def write_slip_gaji(result_dir, brand, company_name, company_address, employees_
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {{
-            --bg-color: #f7f5f0;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --border-color: #000000;
         }}
@@ -212,7 +212,7 @@ def write_slip_gaji(result_dir, brand, company_name, company_address, employees_
             background: var(--card-bg);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(27, 67, 50, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             width: 100%;
             max-width: 750px;
             margin-bottom: 20px;
@@ -221,14 +221,13 @@ def write_slip_gaji(result_dir, brand, company_name, company_address, employees_
             gap: 15px;
             align-items: center;
             justify-content: space-between;
-            border: 1px solid #e3dec3;
+            border: 1px solid #cbd5e1;
         }}
         .control-group {{ display: flex; flex-direction: column; gap: 5px; }}
-        label {{ font-size: 11px; font-weight: 700; text-transform: uppercase; color: #526356; }}
-        select {{ padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid #e3dec3; cursor: pointer; }}
-        select:focus {{ outline: none; border-color: #1b4332; }}
-        .btn-download {{ background-color: #1b4332; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; }}
-        .btn-download:hover {{ background-color: #081c15; }}
+        label {{ font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; }}
+        select {{ padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid #cbd5e1; cursor: pointer; }}
+        .btn-download {{ background-color: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }}
+        .btn-download:hover {{ background-color: #1e293b; }}
         .slip-wrapper {{ background-color: var(--card-bg); width: 100%; max-width: 750px; padding: 30px 40px; border: 2px solid var(--border-color); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }}
         .header-section {{ text-align: center; margin-bottom: 12px; }}
         .company-name {{ font-size: 18px; font-weight: 700; text-transform: uppercase; }}
@@ -425,7 +424,7 @@ def write_rincian_potongan(result_dir, brand, company_name, company_address, emp
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {{
-            --bg-color: #f7f5f0;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --border-color: #000000;
         }}
@@ -444,7 +443,7 @@ def write_rincian_potongan(result_dir, brand, company_name, company_address, emp
             background: var(--card-bg);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(27, 67, 50, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             width: 100%;
             max-width: 750px;
             margin-bottom: 20px;
@@ -453,14 +452,13 @@ def write_rincian_potongan(result_dir, brand, company_name, company_address, emp
             gap: 15px;
             align-items: center;
             justify-content: space-between;
-            border: 1px solid #e3dec3;
+            border: 1px solid #cbd5e1;
         }}
         .control-group {{ display: flex; flex-direction: column; gap: 5px; }}
-        label {{ font-size: 11px; font-weight: 700; text-transform: uppercase; color: #526356; }}
-        select {{ padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid #e3dec3; cursor: pointer; }}
-        select:focus {{ outline: none; border-color: #1b4332; }}
-        .btn-download {{ background-color: #1b4332; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; }}
-        .btn-download:hover {{ background-color: #081c15; }}
+        label {{ font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; }}
+        select {{ padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid #cbd5e1; cursor: pointer; }}
+        .btn-download {{ background-color: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }}
+        .btn-download:hover {{ background-color: #1e293b; }}
         .slip-wrapper {{ background-color: var(--card-bg); width: 100%; max-width: 750px; padding: 30px 40px; border: 2px solid var(--border-color); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }}
         .header-section {{ text-align: center; margin-bottom: 12px; }}
         .company-name {{ font-size: 18px; font-weight: 700; text-transform: uppercase; }}
@@ -745,7 +743,7 @@ def write_rekap_gaji(result_dir, brand, company_name, company_address, employees
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {{
-            --bg-color: #f7f5f0;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --border-color: #000000;
         }}
@@ -764,16 +762,16 @@ def write_rekap_gaji(result_dir, brand, company_name, company_address, employees
             background: var(--card-bg);
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(27, 67, 50, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             width: 100%;
             max-width: 800px;
             margin-bottom: 20px;
             display: flex;
             justify-content: flex-end;
-            border: 1px solid #e3dec3;
+            border: 1px solid #cbd5e1;
         }}
-        .btn-download {{ background-color: #1b4332; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; }}
-        .btn-download:hover {{ background-color: #081c15; }}
+        .btn-download {{ background-color: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }}
+        .btn-download:hover {{ background-color: #1e293b; }}
         .rekap-document {{ width: 100%; max-width: 800px; }}
         .summary-wrapper {{ background-color: var(--card-bg); padding: 30px 40px; border: 2px solid var(--border-color); box-shadow: 0 6px 18px rgba(0,0,0,0.08); margin-bottom: 30px; }}
         .header-section {{ text-align: center; margin-bottom: 12px; }}
