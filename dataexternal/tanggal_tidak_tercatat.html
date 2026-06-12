@@ -97,12 +97,19 @@
             align-items: center;
         }
 
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 10px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
             text-align: left;
-            margin-top: 10px;
+            min-width: 500px;
         }
 
         th, td {
@@ -154,6 +161,25 @@
         .status-mismatch td {
             border-bottom: 1px solid rgba(154, 3, 30, 0.1);
         }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .card {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            .card-title {
+                font-size: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -172,18 +198,20 @@
                 <span class="badge badge-warn">0 Tanggal Terlewat</span>
             </div>
             <p class="info-desc">Berikut adalah daftar tanggal transaksi kasbon yang tercatat di pembukuan kasir harian (Cashflow) namun tidak memiliki catatan pengajuan (Form Input) pada tanggal tersebut.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 150px;">Tanggal</th>
-                        <th>Rincian Transaksi di Cashflow</th>
-                        <th class="num-col" style="width: 150px;">Total Nilai</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td colspan="3" class="empty-state">Semua tanggal di data history tercatat di data input!</td></tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;">Tanggal</th>
+                            <th>Rincian Transaksi di Cashflow</th>
+                            <th class="num-col" style="width: 150px;">Total Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="3" class="empty-state">Semua tanggal di data history tercatat di data input!</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Detail Card: All Dates comparison -->
@@ -192,17 +220,18 @@
                 <span>Daftar Seluruh Tanggal & Status Sinkronisasi</span>
             </div>
             <p class="info-desc">Daftar lengkap tanggal transaksi kasbon dan pengecekan keberadaan datanya di kedua sistem.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Di Cashflow?</th>
-                        <th>Di Form Input HR?</th>
-                        <th>Status Sinkronisasi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Di Cashflow?</th>
+                            <th>Di Form Input HR?</th>
+                            <th>Status Sinkronisasi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
     <tr class="status-ok">
         <td>2026-05-15</td>
         <td>Ya</td>
@@ -392,8 +421,9 @@
         <td>Cocok (Tercatat di Kedua Data)</td>
     </tr>
     
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
