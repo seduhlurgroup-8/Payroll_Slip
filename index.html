@@ -9,14 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: rgba(21, 28, 44, 0.8);
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: rgba(30, 41, 59, 0.5);
-            --error: #ef4444;
+            --bg-color: #f7f5f0;
+            --card-bg: #ffffff;
+            --accent: #1b4332;
+            --accent-hover: #081c15;
+            --text-main: #121212;
+            --text-muted: #526356;
+            --border: #e3dec3;
+            --error: #9a031e;
         }
 
         * {
@@ -29,8 +29,8 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(27, 67, 50, 0.08) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(27, 67, 50, 0.04) 0, transparent 50%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -48,14 +48,14 @@
             padding: 40px 32px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(27, 67, 50, 0.08);
             text-align: center;
             animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .brand-badge {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: linear-gradient(135deg, rgba(27, 67, 50, 0.08), rgba(27, 67, 50, 0.04));
+            border: 1px solid rgba(27, 67, 50, 0.15);
             padding: 6px 16px;
             border-radius: 99px;
             font-size: 11px;
@@ -71,7 +71,7 @@
             font-size: 26px;
             font-weight: 800;
             margin-bottom: 8px;
-            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            background: linear-gradient(135deg, #081c15 0%, #2d6a4f 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -105,7 +105,7 @@
         input[type="password"] {
             width: 100%;
             padding: 14px 16px;
-            background-color: rgba(15, 23, 42, 0.6);
+            background-color: #ffffff;
             border: 1px solid var(--border);
             border-radius: 12px;
             color: var(--text-main);
@@ -116,8 +116,8 @@
 
         input[type="password"]:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-            background-color: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.1);
+            background-color: #ffffff;
         }
 
         .btn-submit {
