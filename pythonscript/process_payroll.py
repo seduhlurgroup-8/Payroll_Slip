@@ -5,7 +5,10 @@ import json
 from datetime import datetime
 
 def clean_name(name):
-    return name.strip().lower()
+    n = name.strip().lower()
+    if n == "friz":
+        return "will"
+    return n
 
 def format_idr(val):
     return f"{val:,}".replace(",", ".")

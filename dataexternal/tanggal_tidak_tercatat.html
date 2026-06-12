@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komparasi Tanggal Kasbon - PT. SIG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f5f0;
+            --card-bg: #ffffff;
+            --accent: #1b4332;
+            --accent-hover: #081c15;
+            --text-main: #121212;
+            --text-muted: #526356;
+            --border: #e3dec3;
+            --success: #2d6a4f;
+            --error: #9a031e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(27, 67, 50, 0.06) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(27, 67, 50, 0.03) 0, transparent 50%);
+            color: var(--text-main);
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, rgba(27, 67, 50, 0.08), rgba(27, 67, 50, 0.04));
+            border: 1px solid rgba(27, 67, 50, 0.15);
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 20px rgba(27, 67, 50, 0.04);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--accent);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f7f5f0;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .num-col {
+            text-align: right;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 24px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-warn {
+            background-color: rgba(154, 3, 30, 0.08);
+            color: var(--error);
+        }
+
+        .info-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .status-mismatch {
+            background-color: rgba(154, 3, 30, 0.02);
+        }
+        
+        .status-mismatch td {
+            border-bottom: 1px solid rgba(154, 3, 30, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="brand-badge">PT. Seduhlur Indo Group</div>
+            <h1>Komparasi Tanggal Kasbon</h1>
+            <p class="subtitle">Analisis pencatatan tanggal kasbon pada Form Input vs Database Cashflow</p>
+        </header>
+
+        <!-- Main Card: Missing Dates -->
+        <div class="card">
+            <div class="card-title">
+                <span>Tanggal yang Hanya Ada di Cashflow (Tidak Ada di Form HR)</span>
+                <span class="badge badge-warn">0 Tanggal Terlewat</span>
+            </div>
+            <p class="info-desc">Berikut adalah daftar tanggal transaksi kasbon yang tercatat di pembukuan kasir harian (Cashflow) namun tidak memiliki catatan pengajuan (Form Input) pada tanggal tersebut.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 150px;">Tanggal</th>
+                        <th>Rincian Transaksi di Cashflow</th>
+                        <th class="num-col" style="width: 150px;">Total Nilai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="3" class="empty-state">Semua tanggal di data history tercatat di data input!</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Detail Card: All Dates comparison -->
+        <div class="card">
+            <div class="card-title">
+                <span>Daftar Seluruh Tanggal & Status Sinkronisasi</span>
+            </div>
+            <p class="info-desc">Daftar lengkap tanggal transaksi kasbon dan pengecekan keberadaan datanya di kedua sistem.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Di Cashflow?</th>
+                        <th>Di Form Input HR?</th>
+                        <th>Status Sinkronisasi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="status-ok">
+        <td>2026-05-15</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-16</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-17</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-mismatch">
+        <td>2026-05-18</td>
+        <td>Tidak</td>
+        <td>Ya</td>
+        <td>Tanggal Hanya Tercatat di Form Input (Tidak di Cashflow)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-19</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-20</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-21</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-22</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-23</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-24</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-26</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-27</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-28</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-29</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-30</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-05-31</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-mismatch">
+        <td>2026-06-01</td>
+        <td>Tidak</td>
+        <td>Ya</td>
+        <td>Tanggal Hanya Tercatat di Form Input (Tidak di Cashflow)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-02</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-03</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-04</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-05</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-06</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-07</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-mismatch">
+        <td>2026-06-08</td>
+        <td>Tidak</td>
+        <td>Ya</td>
+        <td>Tanggal Hanya Tercatat di Form Input (Tidak di Cashflow)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-09</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-10</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+    <tr class="status-ok">
+        <td>2026-06-11</td>
+        <td>Ya</td>
+        <td>Ya</td>
+        <td>Cocok (Tercatat di Kedua Data)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

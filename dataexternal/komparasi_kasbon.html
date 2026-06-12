@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Komparasi Kasbon - PT. SIG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f5f0;
+            --card-bg: #ffffff;
+            --accent: #1b4332;
+            --accent-hover: #081c15;
+            --text-main: #121212;
+            --text-muted: #526356;
+            --border: #e3dec3;
+            --success: #2d6a4f;
+            --error: #9a031e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(27, 67, 50, 0.06) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(27, 67, 50, 0.03) 0, transparent 50%);
+            color: var(--text-main);
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, rgba(27, 67, 50, 0.08), rgba(27, 67, 50, 0.04));
+            border: 1px solid rgba(27, 67, 50, 0.15);
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .grid-panels {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 20px rgba(27, 67, 50, 0.04);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--accent);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f7f5f0;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .num-col {
+            text-align: right;
+        }
+
+        .diff-zero {
+            color: var(--success);
+        }
+
+        .diff-positive {
+            color: var(--error);
+        }
+
+        .diff-negative {
+            color: #d97706;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 24px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-info {
+            background-color: rgba(27, 67, 50, 0.08);
+            color: var(--accent);
+        }
+
+        .badge-warn {
+            background-color: rgba(154, 3, 30, 0.08);
+            color: var(--error);
+        }
+
+        .info-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="brand-badge">PT. Seduhlur Indo Group</div>
+            <h1>Laporan Komparasi Kasbon</h1>
+            <p class="subtitle">Analisis perbandingan antara Database Cashflow dan Form Log Kasbon (Cleaned)</p>
+        </header>
+
+        <div class="grid-panels">
+            <!-- Summary Card -->
+            <div class="card">
+                <div class="card-title">
+                    <span>Ringkasan Total Kasbon per Pegawai</span>
+                    <span class="badge badge-info">Rekap Nilai Kumulatif</span>
+                </div>
+                <p class="info-desc">Perbandingan jumlah akumulasi kasbon yang tercatat di laporan kasir harian (Database Cashflow) dengan form pengajuan kasbon (HR Clean Log).</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Pegawai</th>
+                            <th class="num-col">Total (Database Cashflow)</th>
+                            <th class="num-col">Total (HR Clean Log)</th>
+                            <th class="num-col">Selisih (Cashflow - HR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td><strong>Ardi</strong></td>
+        <td class="num-col">Rp 337.000</td>
+        <td class="num-col">Rp 839.000</td>
+        <td class="num-col diff-negative"><strong>-Rp 502.000</strong></td>
+    </tr>
+    
+    <tr>
+        <td><strong>Aziz</strong></td>
+        <td class="num-col">Rp 1.230.000</td>
+        <td class="num-col">Rp 1.250.000</td>
+        <td class="num-col diff-negative"><strong>-Rp 20.000</strong></td>
+    </tr>
+    
+    <tr>
+        <td><strong>Danu</strong></td>
+        <td class="num-col">Rp 25.000</td>
+        <td class="num-col">Rp 225.000</td>
+        <td class="num-col diff-negative"><strong>-Rp 200.000</strong></td>
+    </tr>
+    
+    <tr>
+        <td><strong>Nathan</strong></td>
+        <td class="num-col">Rp 438.000</td>
+        <td class="num-col">Rp 528.000</td>
+        <td class="num-col diff-negative"><strong>-Rp 90.000</strong></td>
+    </tr>
+    
+    <tr>
+        <td><strong>Will</strong></td>
+        <td class="num-col">Rp 267.000</td>
+        <td class="num-col">Rp 680.000</td>
+        <td class="num-col diff-negative"><strong>-Rp 413.000</strong></td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Discrepancy 1 -->
+            <div class="card">
+                <div class="card-title">
+                    <span>Tercatat di Cashflow, Tidak di Form HR</span>
+                    <span class="badge badge-warn">32 Entri</span>
+                </div>
+                <p class="info-desc">Kasbon berikut dilaporkan oleh kasir harian di laporan keuangan umum, namun tidak ditemukan form/pengajuan tertulisnya di data HR.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Nama Pegawai</th>
+                            <th class="num-col">Nilai Kasbon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td>2026-05-15</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 90.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-15</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-16</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-16</td>
+        <td>Danu</td>
+        <td class="num-col">Rp 15.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-16</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 123.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-16</td>
+        <td>Will</td>
+        <td class="num-col">Rp 20.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-17</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 60.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-17</td>
+        <td>Will</td>
+        <td class="num-col">Rp 130.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-19</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 30.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 30.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Will</td>
+        <td class="num-col">Rp 10.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Will</td>
+        <td class="num-col">Rp 10.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-21</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-21</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-22</td>
+        <td>Will</td>
+        <td class="num-col">Rp 12.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-29</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 35.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-29</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-30</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 100.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-30</td>
+        <td>Will</td>
+        <td class="num-col">Rp 20.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-31</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 32.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-02</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-02</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 25.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-03</td>
+        <td>Will</td>
+        <td class="num-col">Rp 25.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-04</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 60.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-05</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-07</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-07</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 30.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-09</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-11</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 10.000</td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Discrepancy 2 -->
+            <div class="card">
+                <div class="card-title">
+                    <span>Tercatat di Form HR, Tidak di Cashflow</span>
+                    <span class="badge badge-warn">38 Entri</span>
+                </div>
+                <p class="info-desc">Kasbon berikut memiliki form tertulis atau pengajuan ke HR, namun tidak terdaftar atau tidak terpotong dari laporan kasir harian.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Nama Pegawai</th>
+                            <th class="num-col">Nilai Kasbon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td>2026-05-15</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-15</td>
+        <td>Danu</td>
+        <td class="num-col">Rp 15.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-15</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 100.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-15</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 23.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-15</td>
+        <td>Will</td>
+        <td class="num-col">Rp 20.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-16</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-16</td>
+        <td>Will</td>
+        <td class="num-col">Rp 30.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-16</td>
+        <td>Will</td>
+        <td class="num-col">Rp 100.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-17</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-18</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-18</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-18</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 150.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-19</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 30.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-19</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 20.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-19</td>
+        <td>Will</td>
+        <td class="num-col">Rp 10.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-20</td>
+        <td>Danu</td>
+        <td class="num-col">Rp 200.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-21</td>
+        <td>Will</td>
+        <td class="num-col">Rp 15.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-22</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-26</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-29</td>
+        <td>Will</td>
+        <td class="num-col">Rp 20.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-30</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 7.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-30</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 32.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-30</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-05-31</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-01</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-01</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 25.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-02</td>
+        <td>Will</td>
+        <td class="num-col">Rp 25.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-03</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 60.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-04</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-05</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-06</td>
+        <td>Nathan</td>
+        <td class="num-col">Rp 30.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-06</td>
+        <td>Will</td>
+        <td class="num-col">Rp 20.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-07</td>
+        <td>Will</td>
+        <td class="num-col">Rp 400.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-08</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 70.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-09</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 500.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-09</td>
+        <td>Ardi</td>
+        <td class="num-col">Rp 150.000</td>
+    </tr>
+    
+    <tr>
+        <td>2026-06-09</td>
+        <td>Aziz</td>
+        <td class="num-col">Rp 50.000</td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
