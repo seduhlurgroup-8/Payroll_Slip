@@ -1,0 +1,186 @@
+{
+    "timestamp": "2026-06-12T19:13:05.846343",
+    "employees": {
+        "NATHAN": {
+            "id": "NAT-001.AL",
+            "name": "NATHAN",
+            "position": "Allround",
+            "bank_account": "3901085872069934",
+            "platform": "DANA",
+            "gaji_bruto": 1500000,
+            "kasbon_history": [
+                {
+                    "tanggal": "01-06-2026",
+                    "nominal": 25000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "06-06-2026",
+                    "nominal": 30000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "15-05-2026",
+                    "nominal": 100000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "15-05-2026",
+                    "nominal": 23000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "16-05-2026",
+                    "nominal": 50000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "17-05-2026",
+                    "nominal": 50000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "18-05-2026",
+                    "nominal": 150000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "26-05-2026",
+                    "nominal": 50000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "28-05-2026",
+                    "nominal": 50000,
+                    "keterangan": "Kasbon Pegawai"
+                }
+            ],
+            "kasbon_total": 528000,
+            "net_pay": 972000,
+            "terbilang": "Sembilan Ratus Tujuh Puluh Dua Ribu Rupiah"
+        },
+        "WANTO": {
+            "id": "WNT-003.AL",
+            "name": "WANTO",
+            "position": "Allround",
+            "bank_account": "3901085348453104",
+            "platform": "DANA",
+            "gaji_bruto": 1200000,
+            "kasbon_history": [],
+            "kasbon_total": 0,
+            "net_pay": 1200000,
+            "terbilang": "Satu Juta Dua Ratus Ribu Rupiah"
+        },
+        "ARDI": {
+            "id": "ARD-002.AL",
+            "name": "ARDI",
+            "position": "Allround",
+            "bank_account": "122082158296070",
+            "platform": "Shopeepay",
+            "gaji_bruto": 1160000,
+            "kasbon_history": [
+                {
+                    "tanggal": "09-06-2026",
+                    "nominal": 500000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "09-06-2026",
+                    "nominal": 150000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "18-05-2026",
+                    "nominal": 50000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "19-05-2026",
+                    "nominal": 30000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "20-05-2026",
+                    "nominal": 50000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "30-05-2026",
+                    "nominal": 7000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "30-05-2026",
+                    "nominal": 32000,
+                    "keterangan": "Kasbon Pegawai"
+                }
+            ],
+            "kasbon_total": 819000,
+            "net_pay": 341000,
+            "terbilang": "Tiga Ratus Empat Puluh Satu Ribu Rupiah"
+        },
+        "WILL": {
+            "id": "WLL-00.AL",
+            "name": "WILL",
+            "position": "Allround",
+            "bank_account": "3901081259890700",
+            "platform": "DANA",
+            "gaji_bruto": 1350000,
+            "kasbon_history": [
+                {
+                    "tanggal": "02-06-2026",
+                    "nominal": 25000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "06-06-2026",
+                    "nominal": 20000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "07-06-2026",
+                    "nominal": 400000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "07-06-2026",
+                    "nominal": 20000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "15-05-2026",
+                    "nominal": 20000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "16-05-2026",
+                    "nominal": 30000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "16-05-2026",
+                    "nominal": 100000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "19-05-2026",
+                    "nominal": 10000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "21-05-2026",
+                    "nominal": 15000,
+                    "keterangan": "Kasbon Pegawai"
+                },
+                {
+                    "tanggal": "29-05-2026",
+                    "nominal": 20000,
+                    "keterangan": "Kasbon Pegawai"
+                }
+            ],
+            "kasbon_total": 660000,
+            "net_pay": 690000,
+            "terbilang": "Enam Ratus Sembilan Puluh Ribu Rupiah"
+        }
+    }
+}

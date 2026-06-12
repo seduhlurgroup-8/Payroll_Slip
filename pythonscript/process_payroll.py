@@ -181,6 +181,11 @@ def write_slip_gaji(result_dir, brand, company_name, company_address, employees_
     content = f"""<!DOCTYPE html>
 <html lang="id">
 <head>
+    <script>
+        if (sessionStorage.getItem('payroll_auth') !== 'true') {{
+            window.location.href = '../index.html';
+        }}
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slip Gaji - {brand}</title>
@@ -407,6 +412,11 @@ def write_rincian_potongan(result_dir, brand, company_name, company_address, emp
     content = f"""<!DOCTYPE html>
 <html lang="id">
 <head>
+    <script>
+        if (sessionStorage.getItem('payroll_auth') !== 'true') {{
+            window.location.href = '../index.html';
+        }}
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rincian Potongan - {brand}</title>
@@ -721,6 +731,11 @@ def write_rekap_gaji(result_dir, brand, company_name, company_address, employees
     content = f"""<!DOCTYPE html>
 <html lang="id">
 <head>
+    <script>
+        if (sessionStorage.getItem('payroll_auth') !== 'true') {{
+            window.location.href = '../index.html';
+        }}
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekapitulasi Gaji - {brand}</title>

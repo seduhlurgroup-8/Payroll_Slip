@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script>
+        if (sessionStorage.getItem('payroll_auth') !== 'true') {
+            window.location.href = '../index.html';
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekapitulasi Gaji - Merempah</title>
