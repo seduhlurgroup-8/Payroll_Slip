@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slip Gaji - Merempah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --border-color: #000000;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Courier Prime', Courier, monospace;
+            background-color: var(--bg-color);
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 10px;
+        }
+        .controls-container {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 750px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #cbd5e1;
+        }
+        .control-group { display: flex; flex-direction: column; gap: 5px; }
+        label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; }
+        select { padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid #cbd5e1; cursor: pointer; }
+        .btn-download { background-color: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .btn-download:hover { background-color: #1e293b; }
+        .slip-wrapper { background-color: var(--card-bg); width: 100%; max-width: 750px; padding: 30px 40px; border: 2px solid var(--border-color); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+        .header-section { text-align: center; margin-bottom: 12px; }
+        .company-name { font-size: 18px; font-weight: 700; text-transform: uppercase; }
+        .company-address { font-size: 11px; margin-top: 3px; }
+        .line-double { border-top: 1px dashed #000; border-bottom: 1px dashed #000; height: 4px; margin: 8px 0; }
+        .line-single { border-top: 1px dashed #000; margin: 8px 0; }
+        .slip-title { text-align: center; font-size: 15px; font-weight: 700; text-decoration: underline; }
+        .slip-periode { text-align: center; font-size: 12px; margin-bottom: 15px; }
+        .employee-info { display: grid; grid-template-columns: auto 1fr; row-gap: 4px; column-gap: 12px; font-size: 13px; margin-bottom: 15px; }
+        .info-label { width: 90px; }
+        .financials-container { display: grid; grid-template-columns: 1fr 1.05fr; column-gap: 40px; font-size: 12px; }
+        .fin-column { display: flex; flex-direction: column; }
+        .section-title { font-weight: 700; text-decoration: underline; margin-bottom: 8px; }
+        .fin-table { width: 100%; border-collapse: collapse; }
+        .fin-table td { padding: 3px 0; }
+        .val-col { text-align: right; }
+        .eq-col { width: 15px; text-align: center; }
+        .total-row { font-weight: 700; }
+        .net-salary-box { border: 1px solid #000; margin-top: 15px; padding: 8px 12px; font-size: 13px; text-align: center; }
+        .net-amount { font-weight: 700; }
+        .terbilang-text { font-style: italic; font-size: 11px; margin-top: 4px; }
+        .kasbon-details-section { margin-top: 15px; }
+        .kasbon-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .kasbon-table th, .kasbon-table td { border-bottom: 1px dotted #000; padding: 3px 4px; }
+        .kasbon-table th { font-weight: 700; border-bottom: 1px dashed #000; }
+        .footer-signatures { margin-top: 25px; display: flex; justify-content: space-between; font-size: 12px; }
+        .sig-box { text-align: center; width: 200px; }
+        .sig-space { height: 45px; }
+        .sig-name { font-weight: 700; }
+        @media print {
+            body { background: white; padding: 0; }
+            .controls-container { display: none; }
+            .slip-wrapper { box-shadow: none; border: 2px solid #000; padding: 20px 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls-container">
+        <div class="control-group">
+            <label for="employee-select">Pilih Pegawai (Allround)</label>
+            <select id="employee-select" onchange="updateSlipData()">
+                <!-- Options populated dynamically -->
+            </select>
+        </div>
+        <button class="btn-download" onclick="downloadPDF()">
+            Download PDF
+        </button>
+    </div>
+
+    <div class="slip-wrapper" id="slip-target">
+        <div class="header-section">
+            <div class="company-name">PT. Seduhlur Indo Group</div>
+            <div class="company-address">Jl. Candi Trowulan Ruko Square No.17, Kota Malang (Merempah)</div>
+        </div>
+        <div class="line-double"></div>
+        <div class="slip-title">SLIP GAJI KARYAWAN</div>
+        <div class="slip-periode" id="slip-period-text">Periode Juni 2026</div>
+        <div class="employee-info">
+            <div class="info-label">NIK</div><div>: <span id="info-id">-</span></div>
+            <div class="info-label">Nama</div><div>: <span id="info-name">-</span></div>
+            <div class="info-label">Jabatan</div><div>: <span id="info-position">-</span></div>
+            <div class="info-label">Status</div><div>: Karyawan Harian</div>
+        </div>
+        <div class="financials-container">
+            <div class="fin-column">
+                <div class="section-title">Penghasilan</div>
+                <table class="fin-table">
+                    <tbody id="earnings-rows"></tbody>
+                </table>
+            </div>
+            <div class="fin-column">
+                <div class="section-title">Potongan</div>
+                <table class="fin-table">
+                    <tbody id="deductions-rows"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="net-salary-box">
+            <div><span>Penerimaan Bersih = </span><span class="net-amount" id="net-val">Rp 0</span></div>
+            <div class="terbilang-text">Terbilang: <span id="terbilang-val">-</span></div>
+        </div>
+        <div class="kasbon-details-section">
+            <div class="section-title" style="font-size: 11px;">Rincian Potongan Gaji (Kasbon)</div>
+            <table class="kasbon-table">
+                <thead>
+                    <tr><th>Tanggal</th><th>Keterangan</th><th class="val-col">Nilai Kasbon</th></tr>
+                </thead>
+                <tbody id="kasbon-detail-rows"></tbody>
+            </table>
+        </div>
+        <div class="line-single"></div>
+        <div class="footer-signatures">
+            <div class="sig-box">
+                <div>Penerima,</div>
+                <div class="sig-space"></div>
+                <div class="sig-name" id="sig-emp-name">-</div>
+            </div>
+            <div class="sig-box">
+                <div>Malang, <span id="slip-footer-date">-</span></div>
+                <div>Bag. Keuangan</div>
+                <div class="sig-space"></div>
+                <div class="sig-name">Admin Merempah</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const employeesData = {
+    "NATHAN": {
+        "id": "NAT-001.AL",
+        "name": "NATHAN",
+        "position": "Allround",
+        "bank_account": "3901085872069934",
+        "platform": "DANA",
+        "gaji_bruto": 1500000,
+        "kasbon_history": [
+            {
+                "tanggal": "01-06-2026",
+                "nominal": 25000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "06-06-2026",
+                "nominal": 30000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "15-05-2026",
+                "nominal": 100000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "15-05-2026",
+                "nominal": 23000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "16-05-2026",
+                "nominal": 50000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "17-05-2026",
+                "nominal": 50000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "18-05-2026",
+                "nominal": 150000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "26-05-2026",
+                "nominal": 50000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "28-05-2026",
+                "nominal": 50000,
+                "keterangan": "Kasbon Pegawai"
+            }
+        ],
+        "kasbon_total": 528000,
+        "net_pay": 972000,
+        "terbilang": "Sembilan Ratus Tujuh Puluh Dua Ribu Rupiah"
+    },
+    "WANTO": {
+        "id": "WNT-003.AL",
+        "name": "WANTO",
+        "position": "Allround",
+        "bank_account": "3901085348453104",
+        "platform": "DANA",
+        "gaji_bruto": 1200000,
+        "kasbon_history": [],
+        "kasbon_total": 0,
+        "net_pay": 1200000,
+        "terbilang": "Satu Juta Dua Ratus Ribu Rupiah"
+    },
+    "ARDI": {
+        "id": "ARD-002.AL",
+        "name": "ARDI",
+        "position": "Allround",
+        "bank_account": "122082158296070",
+        "platform": "Shopeepay",
+        "gaji_bruto": 1160000,
+        "kasbon_history": [
+            {
+                "tanggal": "09-06-2026",
+                "nominal": 500000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "09-06-2026",
+                "nominal": 150000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "18-05-2026",
+                "nominal": 50000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "19-05-2026",
+                "nominal": 30000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "20-05-2026",
+                "nominal": 50000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "30-05-2026",
+                "nominal": 7000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "30-05-2026",
+                "nominal": 32000,
+                "keterangan": "Kasbon Pegawai"
+            }
+        ],
+        "kasbon_total": 819000,
+        "net_pay": 341000,
+        "terbilang": "Tiga Ratus Empat Puluh Satu Ribu Rupiah"
+    },
+    "WILL": {
+        "id": "WLL-00.AL",
+        "name": "WILL",
+        "position": "Allround",
+        "bank_account": "3901081259890700",
+        "platform": "DANA",
+        "gaji_bruto": 1350000,
+        "kasbon_history": [
+            {
+                "tanggal": "02-06-2026",
+                "nominal": 25000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "06-06-2026",
+                "nominal": 20000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "07-06-2026",
+                "nominal": 400000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "07-06-2026",
+                "nominal": 20000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "15-05-2026",
+                "nominal": 20000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "16-05-2026",
+                "nominal": 30000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "16-05-2026",
+                "nominal": 100000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "19-05-2026",
+                "nominal": 10000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "21-05-2026",
+                "nominal": 15000,
+                "keterangan": "Kasbon Pegawai"
+            },
+            {
+                "tanggal": "29-05-2026",
+                "nominal": 20000,
+                "keterangan": "Kasbon Pegawai"
+            }
+        ],
+        "kasbon_total": 660000,
+        "net_pay": 690000,
+        "terbilang": "Enam Ratus Sembilan Puluh Ribu Rupiah"
+    }
+};
+        function formatVal(num) { return num.toLocaleString('id-ID'); }
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        const monthNamesIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        document.getElementById("slip-period-text").textContent = `Periode: ${monthNamesIndo[today.getMonth()]} ${yyyy}`;
+        document.getElementById("slip-footer-date").textContent = `${dd} ${monthNamesIndo[today.getMonth()]} ${yyyy}`;
+
+        const selectEl = document.getElementById("employee-select");
+        Object.keys(employeesData).forEach(name => {
+            const opt = document.createElement("option");
+            opt.value = name;
+            opt.textContent = `${name} (${employeesData[name].id})`;
+            selectEl.appendChild(opt);
+        });
+
+        function updateSlipData() {
+            const empKey = selectEl.value;
+            const emp = employeesData[empKey];
+            document.getElementById("info-id").textContent = emp.id;
+            document.getElementById("info-name").textContent = emp.name;
+            document.getElementById("info-position").textContent = emp.position;
+            document.getElementById("sig-emp-name").textContent = emp.name;
+
+            let totalPenghasilan = emp.gaji_bruto;
+            document.getElementById("earnings-rows").innerHTML = `
+                <tr><td>Gaji Pokok</td><td class="eq-col">=</td><td class="val-col">${formatVal(emp.gaji_bruto)}</td></tr>
+                <tr class="total-row"><td>Total (A)</td><td class="eq-col">=</td><td class="val-col">${formatVal(totalPenghasilan)}</td></tr>
+            `;
+
+            let totalPotongan = emp.kasbon_total;
+            document.getElementById("deductions-rows").innerHTML = `
+                <tr><td>Potongan Kasbon</td><td class="eq-col">=</td><td class="val-col">${formatVal(emp.kasbon_total)}</td></tr>
+                <tr class="total-row"><td>Total (B)</td><td class="eq-col">=</td><td class="val-col">${formatVal(totalPotongan)}</td></tr>
+            `;
+
+            document.getElementById("net-val").textContent = "Rp " + formatVal(emp.net_pay);
+            document.getElementById("terbilang-val").textContent = emp.terbilang;
+
+            let kasbonHTML = "";
+            if (emp.kasbon_history.length > 0) {
+                emp.kasbon_history.forEach(item => {
+                    kasbonHTML += `<tr><td>${item.tanggal}</td><td>${item.keterangan}</td><td class="val-col">Rp ${formatVal(item.nominal)}</td></tr>`;
+                });
+            } else {
+                kasbonHTML = `<tr><td colspan="3" style="text-align: center; color: #888;">Tidak ada potongan kasbon periode ini.</td></tr>`;
+            }
+            document.getElementById("kasbon-detail-rows").innerHTML = kasbonHTML;
+        }
+
+        if (selectEl.value) { updateSlipData(); }
+
+        function downloadPDF() {
+            const element = document.getElementById('slip-target');
+            const empKey = selectEl.value;
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `Slip_Gaji_${empKey}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Payroll - Merempah</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2c;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .grid-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(15, 23, 42, 0.3);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background-color: rgba(59, 130, 246, 0.03);
+        }
+
+        .upload-zone svg {
+            color: var(--text-muted);
+            width: 40px;
+            height: 40px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-muted);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: rgba(148, 163, 184, 0.1);
+            color: var(--text-muted);
+            align-self: flex-start;
+        }
+
+        .db-viewer {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: rgba(15, 23, 42, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: rgba(15, 23, 42, 0.8);
+            font-weight: 700;
+            color: var(--text-main);
+            position: sticky;
+            top: 0;
+        }
+
+        .nav-links-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .nav-card {
+            background-color: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .nav-card:hover {
+            border-color: var(--accent);
+            background-color: rgba(59, 130, 246, 0.05);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="brand-badge">PT. Seduhlur Indo Group</div>
+            <h1>Sistem Otomasi Payroll</h1>
+            <p class="subtitle">Platform perapihan database dan slip gaji harian - Merempah Malang</p>
+        </header>
+
+        <div class="grid-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </div>
+                    <div class="card-title">Proses Data Mentah</div>
+                </div>
+                
+                <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <div style="font-weight: 600; margin-top: 5px;">Upload File Gaji Baru</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Pilih file CSV (takehomepay, kasbon, dll)</div>
+                    <input type="file" id="file-input" style="display: none;" multiple onchange="handleFileSelect(event)">
+                </div>
+
+                <div class="status-badge" id="process-status">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Sistem Terkoneksi
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="triggerProcess()">Olah Data Payroll</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background-color: rgba(16, 185, 129, 0.1); color: var(--success);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <div class="card-title">Unduh Laporan / PDF</div>
+                </div>
+
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                    Pilih format lembaran yang ingin dibuka untuk diunduh menjadi file PDF 1 halaman compact atau dokumen rekapitulasi multi-halaman.
+                </p>
+
+                <div class="nav-links-grid">
+                    <a href="slip_gaji.html" class="nav-card">
+                        <div style="font-size: 20px; margin-bottom: 8px;">💵</div>
+                        Slip Gaji Karyawan
+                    </a>
+                    <a href="rincian_potongan.html" class="nav-card">
+                        <div style="font-size: 20px; margin-bottom: 8px;">📉</div>
+                        Rincian Potongan
+                    </a>
+                    <a href="rekap_gaji.html" class="nav-card">
+                        <div style="font-size: 20px; margin-bottom: 8px;">📊</div>
+                        Rekapitulasi Gaji
+                    </a>
+                </div>
+
+                <button class="btn btn-secondary" style="margin-top: auto;" onclick="toggleDbViewer()">Data Check (Lihat Database)</button>
+            </div>
+        </div>
+
+        <div class="card db-viewer" id="db-viewer-card">
+            <div class="card-header">
+                <div class="card-title" style="font-size: 16px;">Database Viewer (Live CSV data)</div>
+            </div>
+            
+            <div class="tab-bar">
+                <button class="tab-btn active" id="btn-tab-payroll" onclick="switchTab('payroll')">Account Payroll</button>
+                <button class="tab-btn" id="btn-tab-takehomepay" onclick="switchTab('takehomepay')">Take Home Pay</button>
+                <button class="tab-btn" id="btn-tab-kasbon" onclick="switchTab('kasbon')">Kasbon Log</button>
+            </div>
+
+            <div class="table-container">
+                <table id="data-table">
+                    <!-- Dynamic table data -->
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activeTab = "payroll";
+
+        function setStatus(text, type) {
+            const badge = document.getElementById("process-status");
+            badge.textContent = text;
+            if (type === 'success') {
+                badge.style.backgroundColor = "rgba(16, 185, 129, 0.1)";
+                badge.style.color = "var(--success)";
+            } else if (type === 'error') {
+                badge.style.backgroundColor = "rgba(239, 68, 68, 0.1)";
+                badge.style.color = "var(--error)";
+            } else if (type === 'info') {
+                badge.style.backgroundColor = "rgba(59, 130, 246, 0.1)";
+                badge.style.color = "var(--accent)";
+            } else {
+                badge.style.backgroundColor = "rgba(148, 163, 184, 0.1)";
+                badge.style.color = "var(--text-muted)";
+            }
+        }
+
+        async function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+
+            setStatus(`Mengunggah ${files.length} file...`, 'info');
+
+            for (let file of files) {
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("filename", file.name);
+
+                try {
+                    const res = await fetch("/api/upload", {
+                        method: "POST",
+                        body: formData
+                    });
+                    const result = await res.json();
+                    if (result.status !== 'success') {
+                        setStatus(`Gagal mengunggah ${file.name}: ${result.message}`, 'error');
+                        return;
+                    }
+                } catch (err) {
+                    setStatus(`Error upload: ${err.message}`, 'error');
+                    return;
+                }
+            }
+
+            setStatus(`Sukses mengunggah ${files.length} file ke datainput/`, 'success');
+        }
+
+        async function triggerProcess() {
+            setStatus("Memproses data payroll...", "info");
+            try {
+                const res = await fetch("/api/process", { method: "POST" });
+                const result = await res.json();
+                if (result.status === 'success') {
+                    setStatus("Proses Sukses! Halaman Terupdate.", "success");
+                    alert("Sukses! Data payroll berhasil diolah dan slip gaji/rekapitulasi diperbarui.");
+                    // Reload table if open
+                    if (document.getElementById("db-viewer-card").style.display === "flex") {
+                        renderTable();
+                    }
+                } else {
+                    setStatus(`Gagal memproses: ${result.message}`, "error");
+                    alert(`Gagal memproses: ${result.message}`);
+                }
+            } catch (err) {
+                setStatus(`Error: ${err.message}`, "error");
+                alert(`Error: ${err.message}`);
+            }
+        }
+
+        function toggleDbViewer() {
+            const viewer = document.getElementById("db-viewer-card");
+            if (viewer.style.display === "flex") {
+                viewer.style.display = "none";
+            } else {
+                viewer.style.display = "flex";
+                renderTable();
+            }
+        }
+
+        function switchTab(tabName) {
+            activeTab = tabName;
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.getElementById(`btn-tab-${tabName}`).classList.add("active");
+            renderTable();
+        }
+
+        function parseCSV(text) {
+            const lines = text.trim().split("\n");
+            if (lines.length === 0 || lines[0] === "") return { headers: [], data: [] };
+            const headers = lines[0].split(",").map(h => h.trim());
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === "") continue;
+                const cols = lines[i].split(",").map(c => c.trim());
+                if (cols.length === headers.length) {
+                    const row = {};
+                    for (let j = 0; j < headers.length; j++) {
+                        row[headers[j]] = cols[j];
+                    }
+                    data.push(row);
+                }
+            }
+            return { headers, data };
+        }
+
+        async function renderTable() {
+            const table = document.getElementById("data-table");
+            table.innerHTML = "<tr><td style='color: var(--text-muted);'>Loading data...</td></tr>";
+
+            let url = "";
+            if (activeTab === "payroll") {
+                url = "/companydata/employee_accounts.csv";
+            } else if (activeTab === "takehomepay") {
+                url = "/datacleansing/data_takehomepay_clean.csv";
+            } else {
+                url = "/datacleansing/datakasbon_clean.csv";
+            }
+
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error("File database belum diolah atau kosong.");
+                const text = await res.text();
+                const { headers, data } = parseCSV(text);
+
+                if (headers.length === 0) {
+                    table.innerHTML = "<tr><td style='color: var(--text-muted);'>Tidak ada data ditemukan.</td></tr>";
+                    return;
+                }
+
+                let html = "<thead><tr>";
+                headers.forEach(h => {
+                    html += `<th>${h}</th>`;
+                });
+                html += "</tr></thead><tbody>";
+
+                data.forEach(row => {
+                    html += "<tr>";
+                    headers.forEach(h => {
+                        html += `<td>${row[h]}</td>`;
+                    });
+                    html += "</tr>";
+                });
+                html += "</tbody>";
+                table.innerHTML = html;
+            } catch (err) {
+                table.innerHTML = `<tr><td style='color: var(--error);'>Error: ${err.message}</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>

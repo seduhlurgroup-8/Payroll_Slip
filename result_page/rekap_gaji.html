@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekapitulasi Gaji - Merempah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --border-color: #000000;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Courier Prime', Courier, monospace;
+            background-color: var(--bg-color);
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 10px;
+        }
+        .controls-container {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-download { background-color: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .btn-download:hover { background-color: #1e293b; }
+        .rekap-document { width: 100%; max-width: 800px; }
+        .summary-wrapper { background-color: var(--card-bg); padding: 30px 40px; border: 2px solid var(--border-color); box-shadow: 0 6px 18px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .header-section { text-align: center; margin-bottom: 12px; }
+        .company-name { font-size: 18px; font-weight: 700; text-transform: uppercase; }
+        .company-address { font-size: 11px; margin-top: 3px; }
+        .line-double { border-top: 1px dashed #000; border-bottom: 1px dashed #000; height: 4px; margin: 8px 0; }
+        .line-single { border-top: 1px dashed #000; margin: 8px 0; }
+        .slip-title { text-align: center; font-size: 15px; font-weight: 700; text-decoration: underline; }
+        .slip-periode { text-align: center; font-size: 12px; margin-bottom: 15px; }
+        .rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 15px; }
+        .rekap-table th { font-weight: 700; border-bottom: 1px dashed #000; padding: 8px 4px; }
+        .rekap-table td { padding: 8px 4px; }
+        .val-col { text-align: right; }
+        .total-row { font-weight: 700; border-top: 1px dashed #000; border-bottom: 1px dashed #000; }
+        .slip-wrapper { background-color: var(--card-bg); padding: 30px 40px; border: 2px solid var(--border-color); margin-top: 30px; page-break-inside: avoid; }
+        .employee-info { display: grid; grid-template-columns: auto 1fr; row-gap: 4px; column-gap: 12px; font-size: 13px; margin-bottom: 15px; }
+        .info-label { width: 90px; }
+        .financials-container { display: grid; grid-template-columns: 1fr 1.05fr; column-gap: 40px; font-size: 12px; }
+        .fin-column { display: flex; flex-direction: column; }
+        .section-title { font-weight: 700; text-decoration: underline; margin-bottom: 8px; }
+        .fin-table { width: 100%; border-collapse: collapse; }
+        .fin-table td { padding: 3px 0; }
+        .eq-col { width: 15px; text-align: center; }
+        .net-salary-box { border: 1px solid #000; margin-top: 15px; padding: 8px 12px; font-size: 13px; text-align: center; }
+        .net-amount { font-weight: 700; }
+        .terbilang-text { font-style: italic; font-size: 11px; margin-top: 4px; }
+        .kasbon-details-section { margin-top: 15px; }
+        .kasbon-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .kasbon-table th, .kasbon-table td { border-bottom: 1px dotted #000; padding: 3px 4px; }
+        .kasbon-table th { font-weight: 700; border-bottom: 1px dashed #000; }
+        .footer-signatures { margin-top: 25px; display: flex; justify-content: space-between; font-size: 12px; }
+        .sig-box { text-align: center; width: 200px; }
+        .sig-space { height: 45px; }
+        .sig-name { font-weight: 700; }
+        .slip-page-break { page-break-before: always; }
+        @media print {
+            body { background: white; padding: 0; }
+            .controls-container { display: none; }
+            .summary-wrapper, .slip-wrapper { box-shadow: none; border: 2px solid #000; margin-bottom: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls-container">
+        <button class="btn-download" onclick="downloadPDF()">
+            Download PDF Rekapitulasi & Slip
+        </button>
+    </div>
+    <div class="rekap-document" id="rekap-target">
+        <div class="summary-wrapper">
+            <div class="header-section">
+                <div class="company-name">PT. Seduhlur Indo Group</div>
+                <div class="company-address">Jl. Candi Trowulan Ruko Square No.17, Kota Malang (Merempah)</div>
+            </div>
+            <div class="line-double"></div>
+            <div class="slip-title">REKAPITULASI TOTAL GAJI PEGAWAI (ALLROUND)</div>
+            <div class="slip-periode">Periode Juni 2026</div>
+            <table class="rekap-table">
+                <thead>
+                    <tr><th>No</th><th>Nama Pegawai</th><th class="val-col">Gaji Bruto</th><th class="val-col">Potongan</th><th class="val-col">Net Takehomepay</th><th>Payroll Account</th></tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">1</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px; font-weight: bold;">ARDI</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 1.160.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 819.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col" style="font-weight: bold;">Rp 341.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">Shopeepay - 122082158296070</td>
+        </tr>
+        
+        <tr>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">2</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px; font-weight: bold;">NATHAN</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 1.500.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 528.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col" style="font-weight: bold;">Rp 972.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">DANA - 3901085872069934</td>
+        </tr>
+        
+        <tr>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">3</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px; font-weight: bold;">WANTO</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 1.200.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 0</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col" style="font-weight: bold;">Rp 1.200.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">DANA - 3901085348453104</td>
+        </tr>
+        
+        <tr>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">4</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px; font-weight: bold;">WILL</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 1.350.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col">Rp 660.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;" class="val-col" style="font-weight: bold;">Rp 690.000</td>
+            <td style="border-bottom: 1px dotted #000; padding: 8px 4px;">DANA - 3901081259890700</td>
+        </tr>
+        
+                    <tr class="total-row">
+                        <td colspan="2">TOTAL KESELURUHAN</td>
+                        <td class="val-col">Rp 5.210.000</td>
+                        <td class="val-col">Rp 2.007.000</td>
+                        <td class="val-col">Rp 3.203.000</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="line-single"></div>
+            <div class="footer-signatures" style="margin-top: 40px;">
+                <div class="sig-box" style="margin-left: auto;">
+                    <div>Malang, 31 Mei 2026</div><div>Bag. Keuangan</div><div class="sig-space"></div><div class="sig-name">Admin Merempah</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slip-page-break">
+            <div class="slip-wrapper">
+                <div class="header-section">
+                    <div class="company-name">PT. Seduhlur Indo Group</div>
+                    <div class="company-address">Jl. Candi Trowulan Ruko Square No.17, Kota Malang (Merempah)</div>
+                </div>
+                <div class="line-double"></div>
+                <div class="slip-title">SLIP GAJI KARYAWAN</div>
+                <div class="slip-periode">Periode Juni 2026</div>
+                <div class="employee-info">
+                    <div class="info-label">NIK</div><div>: ARD-002.AL</div>
+                    <div class="info-label">Nama</div><div>: ARDI</div>
+                    <div class="info-label">Jabatan</div><div>: Allround</div>
+                    <div class="info-label">Status</div><div>: Karyawan Harian</div>
+                </div>
+                <div class="financials-container">
+                    <div class="fin-column">
+                        <div class="section-title">Penghasilan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Gaji Pokok</td><td class="eq-col">=</td><td class="val-col">1.160.000</td></tr>
+                                <tr class="total-row"><td>Total (A)</td><td class="eq-col">=</td><td class="val-col">1.160.000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fin-column">
+                        <div class="section-title">Potongan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Potongan Kasbon</td><td class="eq-col">=</td><td class="val-col">819.000</td></tr>
+                                <tr class="total-row"><td>Total (B)</td><td class="eq-col">=</td><td class="val-col">819.000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="net-salary-box">
+                    <div><span>Penerimaan Bersih = </span><span class="net-amount">Rp 341.000</span></div>
+                    <div class="terbilang-text">Terbilang: Tiga Ratus Empat Puluh Satu Ribu Rupiah</div>
+                </div>
+                <div class="kasbon-details-section">
+                    <div class="section-title" style="font-size: 11px;">Rincian Potongan Gaji (Kasbon)</div>
+                    <table class="kasbon-table">
+                        <thead><tr><th>Tanggal</th><th>Keterangan</th><th class="val-col">Nilai Kasbon</th></tr></thead>
+                        <tbody>
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">09-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 500.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">09-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 150.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">18-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 50.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">19-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 30.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">20-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 50.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">30-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 7.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">30-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 32.000</td>
+                </tr>
+                </tbody>
+                    </table>
+                </div>
+                <div class="line-single"></div>
+                <div class="footer-signatures">
+                    <div class="sig-box">
+                        <div>Penerima,</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">ARDI</div>
+                    </div>
+                    <div class="sig-box">
+                        <div>Malang, 31 Mei 2026</div>
+                        <div>Bag. Keuangan</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">Admin Merempah</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slip-page-break">
+            <div class="slip-wrapper">
+                <div class="header-section">
+                    <div class="company-name">PT. Seduhlur Indo Group</div>
+                    <div class="company-address">Jl. Candi Trowulan Ruko Square No.17, Kota Malang (Merempah)</div>
+                </div>
+                <div class="line-double"></div>
+                <div class="slip-title">SLIP GAJI KARYAWAN</div>
+                <div class="slip-periode">Periode Juni 2026</div>
+                <div class="employee-info">
+                    <div class="info-label">NIK</div><div>: NAT-001.AL</div>
+                    <div class="info-label">Nama</div><div>: NATHAN</div>
+                    <div class="info-label">Jabatan</div><div>: Allround</div>
+                    <div class="info-label">Status</div><div>: Karyawan Harian</div>
+                </div>
+                <div class="financials-container">
+                    <div class="fin-column">
+                        <div class="section-title">Penghasilan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Gaji Pokok</td><td class="eq-col">=</td><td class="val-col">1.500.000</td></tr>
+                                <tr class="total-row"><td>Total (A)</td><td class="eq-col">=</td><td class="val-col">1.500.000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fin-column">
+                        <div class="section-title">Potongan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Potongan Kasbon</td><td class="eq-col">=</td><td class="val-col">528.000</td></tr>
+                                <tr class="total-row"><td>Total (B)</td><td class="eq-col">=</td><td class="val-col">528.000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="net-salary-box">
+                    <div><span>Penerimaan Bersih = </span><span class="net-amount">Rp 972.000</span></div>
+                    <div class="terbilang-text">Terbilang: Sembilan Ratus Tujuh Puluh Dua Ribu Rupiah</div>
+                </div>
+                <div class="kasbon-details-section">
+                    <div class="section-title" style="font-size: 11px;">Rincian Potongan Gaji (Kasbon)</div>
+                    <table class="kasbon-table">
+                        <thead><tr><th>Tanggal</th><th>Keterangan</th><th class="val-col">Nilai Kasbon</th></tr></thead>
+                        <tbody>
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">01-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 25.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">06-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 30.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">15-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 100.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">15-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 23.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">16-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 50.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">17-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 50.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">18-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 150.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">26-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 50.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">28-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 50.000</td>
+                </tr>
+                </tbody>
+                    </table>
+                </div>
+                <div class="line-single"></div>
+                <div class="footer-signatures">
+                    <div class="sig-box">
+                        <div>Penerima,</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">NATHAN</div>
+                    </div>
+                    <div class="sig-box">
+                        <div>Malang, 31 Mei 2026</div>
+                        <div>Bag. Keuangan</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">Admin Merempah</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slip-page-break">
+            <div class="slip-wrapper">
+                <div class="header-section">
+                    <div class="company-name">PT. Seduhlur Indo Group</div>
+                    <div class="company-address">Jl. Candi Trowulan Ruko Square No.17, Kota Malang (Merempah)</div>
+                </div>
+                <div class="line-double"></div>
+                <div class="slip-title">SLIP GAJI KARYAWAN</div>
+                <div class="slip-periode">Periode Juni 2026</div>
+                <div class="employee-info">
+                    <div class="info-label">NIK</div><div>: WNT-003.AL</div>
+                    <div class="info-label">Nama</div><div>: WANTO</div>
+                    <div class="info-label">Jabatan</div><div>: Allround</div>
+                    <div class="info-label">Status</div><div>: Karyawan Harian</div>
+                </div>
+                <div class="financials-container">
+                    <div class="fin-column">
+                        <div class="section-title">Penghasilan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Gaji Pokok</td><td class="eq-col">=</td><td class="val-col">1.200.000</td></tr>
+                                <tr class="total-row"><td>Total (A)</td><td class="eq-col">=</td><td class="val-col">1.200.000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fin-column">
+                        <div class="section-title">Potongan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Potongan Kasbon</td><td class="eq-col">=</td><td class="val-col">0</td></tr>
+                                <tr class="total-row"><td>Total (B)</td><td class="eq-col">=</td><td class="val-col">0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="net-salary-box">
+                    <div><span>Penerimaan Bersih = </span><span class="net-amount">Rp 1.200.000</span></div>
+                    <div class="terbilang-text">Terbilang: Satu Juta Dua Ratus Ribu Rupiah</div>
+                </div>
+                <div class="kasbon-details-section">
+                    <div class="section-title" style="font-size: 11px;">Rincian Potongan Gaji (Kasbon)</div>
+                    <table class="kasbon-table">
+                        <thead><tr><th>Tanggal</th><th>Keterangan</th><th class="val-col">Nilai Kasbon</th></tr></thead>
+                        <tbody>
+            <tr>
+                <td colspan="3" style="text-align: center; color: #888; padding: 6px;">Tidak ada potongan kasbon periode ini.</td>
+            </tr>
+            </tbody>
+                    </table>
+                </div>
+                <div class="line-single"></div>
+                <div class="footer-signatures">
+                    <div class="sig-box">
+                        <div>Penerima,</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">WANTO</div>
+                    </div>
+                    <div class="sig-box">
+                        <div>Malang, 31 Mei 2026</div>
+                        <div>Bag. Keuangan</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">Admin Merempah</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slip-page-break">
+            <div class="slip-wrapper">
+                <div class="header-section">
+                    <div class="company-name">PT. Seduhlur Indo Group</div>
+                    <div class="company-address">Jl. Candi Trowulan Ruko Square No.17, Kota Malang (Merempah)</div>
+                </div>
+                <div class="line-double"></div>
+                <div class="slip-title">SLIP GAJI KARYAWAN</div>
+                <div class="slip-periode">Periode Juni 2026</div>
+                <div class="employee-info">
+                    <div class="info-label">NIK</div><div>: WLL-00.AL</div>
+                    <div class="info-label">Nama</div><div>: WILL</div>
+                    <div class="info-label">Jabatan</div><div>: Allround</div>
+                    <div class="info-label">Status</div><div>: Karyawan Harian</div>
+                </div>
+                <div class="financials-container">
+                    <div class="fin-column">
+                        <div class="section-title">Penghasilan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Gaji Pokok</td><td class="eq-col">=</td><td class="val-col">1.350.000</td></tr>
+                                <tr class="total-row"><td>Total (A)</td><td class="eq-col">=</td><td class="val-col">1.350.000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fin-column">
+                        <div class="section-title">Potongan</div>
+                        <table class="fin-table">
+                            <tbody>
+                                <tr><td>Potongan Kasbon</td><td class="eq-col">=</td><td class="val-col">660.000</td></tr>
+                                <tr class="total-row"><td>Total (B)</td><td class="eq-col">=</td><td class="val-col">660.000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="net-salary-box">
+                    <div><span>Penerimaan Bersih = </span><span class="net-amount">Rp 690.000</span></div>
+                    <div class="terbilang-text">Terbilang: Enam Ratus Sembilan Puluh Ribu Rupiah</div>
+                </div>
+                <div class="kasbon-details-section">
+                    <div class="section-title" style="font-size: 11px;">Rincian Potongan Gaji (Kasbon)</div>
+                    <table class="kasbon-table">
+                        <thead><tr><th>Tanggal</th><th>Keterangan</th><th class="val-col">Nilai Kasbon</th></tr></thead>
+                        <tbody>
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">02-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 25.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">06-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 20.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">07-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 400.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">07-06-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 20.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">15-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 20.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">16-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 30.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">16-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 100.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">19-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 10.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">21-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 15.000</td>
+                </tr>
+                
+                <tr>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">29-05-2026</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;">Kasbon Pegawai</td>
+                    <td style="border-bottom: 1px dotted #000; padding: 3px 4px;" class="val-col">Rp 20.000</td>
+                </tr>
+                </tbody>
+                    </table>
+                </div>
+                <div class="line-single"></div>
+                <div class="footer-signatures">
+                    <div class="sig-box">
+                        <div>Penerima,</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">WILL</div>
+                    </div>
+                    <div class="sig-box">
+                        <div>Malang, 31 Mei 2026</div>
+                        <div>Bag. Keuangan</div>
+                        <div class="sig-space"></div>
+                        <div class="sig-name">Admin Merempah</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('rekap-target');
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `Rekap_Gaji_Mei_2026.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+            html2pdf().from(element).set(opt).save();
+        }
+    </script>
+</body>
+</html>
